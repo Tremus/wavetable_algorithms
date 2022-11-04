@@ -4,6 +4,7 @@ from src.config import N
 from src.utils import *
 
 t: NDDoubleArr = np.arange(0, 1, 1 / N)
+assert len(t) == N
 M_PI = math.pi
 M_PI2 = math.pi / 2
 DEFAULT_PHASE = -1.5707963267948966j
@@ -12,8 +13,34 @@ def create_sine(freq: float) -> NDDoubleArr:
     p: float = (2 * np.pi * freq)
     return np.sin(t * p)
 
-def create_saw(wt_pos: float) -> NDDoubleArr:
+def create_saw() -> NDDoubleArr:
     return np.arange(-1, 1, 2 / N)
+
+def create_triangle() -> NDDoubleArr:
+    ramp_up = np.arange(-1, 1, 4 / N)
+    ramp_down = np.flip(ramp_up)
+    return np.concatenate([ramp_up, ramp_down])
+
+def create_basic_shapes(wt_pos:float):
+    # 5 shapes
+    num = round(wt_pos * 4)
+    if num is 0:
+        return create_sine(1)
+    if num is 1:
+        pt1 = np.arange(0, 1, 1 / (N // 4))
+        pt2 = 1 - pt1
+        pt3 = -1 + pt2
+        pt4 = -1 + pt1
+        return np.concatenate([pt1, pt2, pt3, pt4])
+    if num is 2:
+        pt1 = np.arange(0, 1, 2 / N)
+        pt2 = -1 + pt1
+        return np.concatenate([pt1, pt2])
+    # square
+    if num is 3:
+        return create_PWM_square(0.5)
+    # pulse
+    return create_PWM_square(0.225)
 
 def sine_add(wt_pos: float) -> NDDoubleArr:
     num_harmonics = wt_pos * 15

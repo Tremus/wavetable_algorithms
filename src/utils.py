@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import numpy.typing as npt
+from .config import N
 
 NDDoubleArr = npt.NDArray[np.float64]
 NDCDoubleArr = npt.NDArray[np.complex128]
@@ -28,3 +29,12 @@ def np_polar_to_rectangular(arr: NDCDoubleArr) -> NDCDoubleArr:
     re = mags * np.cos(phases)
     im = mags * np.sin(phases)
     return re + im * 1j
+
+def normalise_0dB(x: npt.ArrayLike):
+    # normalise to be between -1,1
+    return x * (1 / max(np.max(x), abs(np.min(x))))
+
+def window_rms(x):
+    x2 = np.power(x,2)
+    window = np.ones(N)/float(N)
+    return np.sqrt(np.convolve(x2, window, 'valid'))[0]

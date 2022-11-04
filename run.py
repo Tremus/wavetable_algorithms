@@ -20,11 +20,14 @@ x = np.arange(N)
 
 
 # The parametrized function to be plotted
-def get_y(wt_pos):
-    y = create_FFT_random(wt_pos)
-    # normalise to be between -1,1
-    y = y * (1 / max(np.max(y), abs(np.min(y))))
-    return y
+def get_y(wt_pos: float):
+    wave = sine_add(wt_pos)
+    # wave = create_PWM_square(wt_pos)
+    wave = normalise_0dB(wave)
+
+    # print('RMS', window_rms(wave))
+
+    return wave
 
 def get_magnitudes(y: npt.ArrayLike) -> NDDoubleArr:
     Y: NDCDoubleArr = np.fft.fft(y)
