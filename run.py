@@ -21,16 +21,16 @@ x = np.arange(N)
 
 # The parametrized function to be plotted
 def get_y(wt_pos):
-    y = create_tanh_triangle(wt_pos)
+    y = create_FFT_random(wt_pos)
     # normalise to be between -1,1
     y = y * (1 / max(np.max(y), abs(np.min(y))))
     return y
 
-def get_magnitudes(y):
-    Y = np.fft.fft(y)
+def get_magnitudes(y: npt.ArrayLike) -> NDDoubleArr:
+    Y: NDCDoubleArr = np.fft.fft(y)
     Y = Y[:LIMIT]
     # get magnitude, hypot of a complex number
-    magnitudes = np.hypot(np.real(Y), np.imag(Y))
+    magnitudes: NDDoubleArr = np.hypot(np.real(Y), np.imag(Y))
     return magnitudes
 
 # Create the figure and the line that we will manipulate
