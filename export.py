@@ -1,8 +1,6 @@
 import soundfile as sf
 from src.methods import *
 
-create_wave_function = lambda wt_pos: create_exp(wt_pos)
-
 assert N == 2048
 
 NUM_FRAMES = 256
@@ -36,10 +34,6 @@ def export_to_ogg(name: str, data: npt.ArrayLike):
         samplerate=48000 * 2,
         subtype='VORBIS')
 
-def create_wave(wt_pos: float):
-    wave = create_wave_function(wt_pos)
-    wave = normalise_0dB(wave)
-    return wave
 
 frames = []
 for i in range(NUM_FRAMES):

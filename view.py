@@ -8,7 +8,6 @@ from matplotlib.widgets import Slider
 from src.methods import *
 from src.config import N
 
-create_wave_function = lambda wt_pos: create_exp(wt_pos)
 
 X_TICKS = [int(N / 4) * i for i in range(5)]
 X_LABELS = [str(i) for i in X_TICKS]

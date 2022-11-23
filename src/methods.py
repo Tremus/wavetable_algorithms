@@ -3,6 +3,9 @@ import math
 from src.config import N
 from src.utils import *
 
+create_wave_function = lambda wt_pos: create_exp(wt_pos)
+
+
 t: NDDoubleArr = np.arange(0, 1, 1 / N)
 assert len(t) == N
 M_PI = math.pi
@@ -101,7 +104,8 @@ def create_lp_saw(wt_pos: float, num_harmonics = 8) -> NDDoubleArr:
 def create_exp(wt_pos: float) -> NDDoubleArr:
     """Looks like a kick"""
     saw: NDDoubleArr = np.arange(1, 0, -1 / N)
-    amount = 0.5 + wt_pos * 2
+    # amount = 0.5 + wt_pos * 2
+    amount = 0.5 + wt_pos * math.e
     return np.sin(0.25 * np.power(2 * np.e, amount * saw + 1.5))
 
 def create_hourglass(wt_pos: float) -> NDDoubleArr:
