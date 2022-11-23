@@ -37,6 +37,9 @@ def get_magnitudes(y: npt.ArrayLike) -> NDDoubleArr:
 
 # Create the figure and the line that we will manipulate
 fig, (ax0, ax1) = plt.subplots(nrows=1, ncols=2, figsize=(7,3))
+ax0.set_title('Signal')
+ax1.set_title('Magnitudes (FFT)')
+
 y = get_y(0)
 line0, = ax0.plot(x, y)
 
