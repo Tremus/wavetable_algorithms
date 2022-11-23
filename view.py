@@ -8,6 +8,7 @@ from matplotlib.widgets import Slider
 from src.methods import *
 from src.config import N
 
+create_wave_function = lambda wt_pos: create_exp(wt_pos)
 
 X_TICKS = [int(N / 4) * i for i in range(5)]
 X_LABELS = [str(i) for i in X_TICKS]
@@ -21,8 +22,7 @@ x = np.arange(N)
 
 # The parametrized function to be plotted
 def get_y(wt_pos: float):
-    wave = create_fft_add_nths_sqrt(wt_pos, 4, 16, True)
-    # wave = create_PWM_square(wt_pos)
+    wave = create_wave_function(wt_pos)
     wave = normalise_0dB(wave)
 
     # print('RMS', window_rms(wave))
