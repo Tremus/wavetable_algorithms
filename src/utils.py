@@ -35,6 +35,7 @@ def np_polar_to_rectangular(arr: NDCDoubleArr) -> NDCDoubleArr:
 
 def normalise_0dB(x: npt.ArrayLike):
     # normalise to be between -1,1
+    # this avoids 'clipping' in integer PCM waves
     return x * (1 / max(np.max(x), abs(np.min(x))))
 
 def window_rms(x):
