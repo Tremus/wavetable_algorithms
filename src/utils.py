@@ -12,6 +12,9 @@ def skew(x: float, a: float) -> float:
     b = a * x;
     return b / (1 - a - x + b + b)
 
+def lininterp(amt, start, end):
+    return start + amt * (end - start)
+
 def get_magnitude(real: float, imag: float) -> float:
     return math.hypot(real, imag)
 

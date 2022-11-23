@@ -10,6 +10,7 @@ M_PI2 = math.pi / 2
 DEFAULT_PHASE = -1.5707963267948966j
 
 def create_sine(freq: float) -> NDDoubleArr:
+    assert freq <= (N / 2)
     p: float = (2 * np.pi * freq)
     return np.sin(t * p)
 
@@ -24,20 +25,20 @@ def create_triangle() -> NDDoubleArr:
 def create_basic_shapes(wt_pos:float):
     # 5 shapes
     num = round(wt_pos * 4)
-    if num is 0:
+    if num == 0:
         return create_sine(1)
-    if num is 1:
+    if num == 1:
         pt1 = np.arange(0, 1, 1 / (N // 4))
         pt2 = 1 - pt1
         pt3 = -1 + pt2
         pt4 = -1 + pt1
         return np.concatenate([pt1, pt2, pt3, pt4])
-    if num is 2:
+    if num == 2:
         pt1 = np.arange(0, 1, 2 / N)
         pt2 = -1 + pt1
         return np.concatenate([pt1, pt2])
     # square
-    if num is 3:
+    if num == 3:
         return create_PWM_square(0.5)
     # pulse
     return create_PWM_square(0.225)
@@ -63,14 +64,24 @@ def create_fft_add_nths(wt_pos: float, num_harmonics = 4) -> NDDoubleArr:
         data = data + s
     return data
 
-def create_fft_add_nths_sqrt(wt_pos: float, num_harmonics = 4) -> NDDoubleArr:
-    n_stride = round(1 + wt_pos * 7)
-    harmonics = [1 + i * n_stride for i in range(num_harmonics)]
-    amplitudes = [1 / math.sqrt(1 + i) for i in range(num_harmonics)]
+
+def create_fft_add_nths_sqrt(wt_pos: float, num_harmonics = 4, max_stride = 8, smooth = False) -> NDDoubleArr:
+    """Works similar to a 'harmonic stretch' spectral filter on saw waves"""
+    assert max_stride > 1
+    n_stride = 1 + wt_pos * (max_stride - 1)
+    if not smooth:
+        n_stride = round(n_stride)
     data = np.zeros(N)
-    for h, amp in zip(harmonics, amplitudes):
-        s = create_sine(h) * amp
-        data = data + s
+    for i in range(num_harmonics):
+        harmonic = 1 + i * n_stride
+        amplitude = 1 / math.sqrt(1 + i)
+        s = create_sine(math.floor(harmonic))
+        if smooth:
+            s2 = create_sine(math.ceil(harmonic))
+            interp_amt = harmonic - math.floor(harmonic)
+            s = lininterp(interp_amt, s, s2)
+        s *= amplitude
+        data += s
     return data
 
 def create_lp_saw(wt_pos: float, num_harmonics = 8) -> NDDoubleArr:

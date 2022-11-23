@@ -21,7 +21,7 @@ x = np.arange(N)
 
 # The parametrized function to be plotted
 def get_y(wt_pos: float):
-    wave = sine_add(wt_pos)
+    wave = create_fft_add_nths_sqrt(wt_pos, 4, 16, True)
     # wave = create_PWM_square(wt_pos)
     wave = normalise_0dB(wave)
 
